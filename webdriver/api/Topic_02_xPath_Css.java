@@ -1,9 +1,11 @@
 package api;
 
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
@@ -11,9 +13,13 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 
-public class Topic_02_xPath_Css_Part_1 {
+public class Topic_02_xPath_Css {
 	WebDriver driver;
-
+	
+	Random randomGenerator = new Random();
+	int randomInt = randomGenerator.nextInt(1000); 
+	String randomUsername = "trungtest" + randomInt + "@gmail.com";
+	
 	@BeforeClass
 	public void beforeClass() {
 		driver = new FirefoxDriver();
@@ -65,14 +71,32 @@ public class Topic_02_xPath_Css_Part_1 {
 		driver.findElement(By.xpath("//a[@title='Create an Account']")).click();
 		driver.findElement(By.id("firstname")).sendKeys("trung");
 		driver.findElement(By.id("lastname")).sendKeys("nguyen");
-		driver.findElement(By.id("email_address")).sendKeys("trungtest@gmail.com");
+		driver.findElement(By.id("email_address")).sendKeys(randomUsername);
 		driver.findElement(By.id("password")).sendKeys("password123");
 		driver.findElement(By.id("confirmation")).sendKeys("password123");
 		driver.findElement(By.xpath("//button[@title='Register']")).click();
 		Assert.assertTrue(driver.findElement(By.xpath("//span[text()='Thank you for registering with Main Website Store.']")).isDisplayed());
-
+		Assert.assertTrue(driver.findElement(By.xpath("//div[@class='box-content']//p[contains(text(),'trung')]")).isDisplayed());
+		Assert.assertTrue(driver.findElement(By.xpath("//div[@class='box-content']//p[contains(text(),'nguyen')]")).isDisplayed());
+		Assert.assertTrue(driver.findElement(By.xpath("//div[@class='box-content']//br[1]")).isDisplayed());	
+		driver.findElement(By.xpath("//div[@class='skip-links']//span[contains(text(),'Account')]")).click();	
+		driver.findElement(By.xpath("//a[@title='Log Out']")).click();	
 	}
-
+	
+	@Test
+	public void Login_06_Login_With_Valid_Email_And_Password() {
+		driver.findElement(By.xpath("//div[@class='footer']//a[@title='My Account']")).click();
+		driver.findElement(By.xpath("//input[@title='Email Address']")).sendKeys(randomUsername);
+		driver.findElement(By.xpath("//input[@title='Password']")).sendKeys("password123");
+		driver.findElement(By.xpath("//button[@title='Login']")).click();
+		Assert.assertTrue(driver.findElement(By.xpath("//h1[text()='My Dashboard']")).isDisplayed());
+		Assert.assertTrue(driver.findElement(By.xpath("//strong[contains(text(),'Hello, trung nguyen!')]")).isDisplayed());
+		Assert.assertTrue(driver.findElement(By.xpath("//div[@class='box-content']//p[contains(text(),'trung')]")).isDisplayed());
+		Assert.assertTrue(driver.findElement(By.xpath("//div[@class='box-content']//p[contains(text(),'nguyen')]")).isDisplayed());
+		Assert.assertTrue(driver.findElement(By.xpath("//div[@class='box-content']//br[1]")).isDisplayed());	
+	}
+	
+	
 	@AfterClass
 	public void afterClass() {
 		driver.quit();
