@@ -7,7 +7,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.annotations.Test;
 
 
-public class Topic_03_Run_Browser {
+public class Topic_03_Run_Browser_Part_I {
 	WebDriver driver;
 	String projectPath = System.getProperty("user.dir");
 
